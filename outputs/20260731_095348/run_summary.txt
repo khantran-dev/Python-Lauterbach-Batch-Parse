@@ -1,0 +1,8 @@
+Run Timestamp: 20260731_095348
+
+Files Found: 80
+Files Processed: 80
+Files Failed: 0
+
+Excel Output:
+my_export.xlsx
