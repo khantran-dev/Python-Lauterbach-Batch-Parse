@@ -1,132 +1,211 @@
-# Python-Lauterbach-Batch-Parse
 
-Command-line tool that parses Lauterbach TRACE32 `.cmm` feature upgrade files, prints license information to the terminal, and exports an Excel summary.
+---
 
-## Requirements
+## Required Software
 
-- Python 3.11+
-- `openpyxl` (install via `pip install -r requirements.txt`)
+        ### Python
 
-## Usage
+        Python 3.11 or newer is required.
 
-**Single file:**
+        Verify Python is installed:
+
+        ```powershell
+        py --version
+        ```
+
+        Expected:
+
+        ```text
+        Python 3.11+
+        ```
+
+        If Python is not installed:
+
+        1. Download Python from:
+        https://www.python.org/downloads/
+
+        2. During installation, make sure to check:
+
+        ```text
+        ✅ Add Python to PATH
+        ```
+
+        3. Verify installation:
+
+        ```powershell
+        py --version
+        ```
+
+# Initial Setup
+
+Open PowerShell and navigate to the project folder:
+
+1. Open the Folder:
+
+```text
+Python-Lauterbach-Batch-Parse
 ```
-python main.py sample.cmm
+
+2. In File Explorer, click inside the folder
+
+3. In the address bar, type:
+
+```text
+powershell
 ```
 
-**Folder (processes all `.cmm` files, sorted):**
-```
-python main.py input_folder
+4. Press Enter
+
+PowerShell will open directly in the project folder
+
+Install required Python packages:
+
+```powershell
+py -m pip install -r requirements.txt
 ```
 
-**Folder with custom Excel output name:**
-```
-python main.py input_folder --excel my_export.xlsx
+Expected:
+
+```text
+Successfully installed openpyxl
 ```
 
-**Verbose debug logging:**
-```
-python main.py input_folder -v
+---
+
+# Adding CMM Files
+
+Place all Lauterbach `.cmm` files into:
+
+```text
+input_folder
 ```
 
-## Output structure
+---
 
-Every run creates a unique timestamped folder under `outputs/`:
+# Running The Program
 
+## Process All Files In Input Folder
+
+```powershell
+py main.py input_folder
 ```
-outputs/
-└── YYYYMMDD_HHMMSS/
-    ├── lauterbach_output_YYYYMMDD_HHMMSS.xlsx
+
+---
+
+## Generate A Custom Excel Filename
+
+```powershell
+py main.py input_folder --excel my_export.xlsx
+```
+
+---
+
+# Output Folder Structure
+
+Every execution creates a new timestamped output folder.
+
+Example:
+
+```text
+outputs
+│
+├── 20260731_091100
+│   ├── lauterbach_output_20260731_091100.xlsx
+│   └── run_summary.txt
+│
+├── 20260731_101530
+│   ├── lauterbach_output_20260731_101530.xlsx
+│   └── run_summary.txt
+│
+└── 20260731_143215
+    ├── lauterbach_output_20260731_143215.xlsx
     └── run_summary.txt
 ```
 
-When `--excel my_export.xlsx` is supplied the Excel file is named `my_export.xlsx` but still placed inside the timestamped folder.
+No previous outputs are overwritten.
 
-## Terminal output
+---
 
-Parsed cable data is printed for each file, followed by a batch summary:
+# Troubleshooting
 
-```
-==================================================
-File: sample.cmm
-==================================================
-==================================================
-Debug Cable
-==================================================
 
-Serial Number: C08110115002
+## Python Not Found
 
-==================================================
-License Categories
-==================================================
+Verify:
 
-[Arm / Cortex]
-Category Serial: C08110115002
-
-  LA-7742   ARM9
-  LA-7843X  ARMv7-A/R
-  ...
-
-==================================================
-Batch Summary
-==================================================
-
-Files Found:       1
-Files Processed:   1
-Files Failed:      0
-
-Output Folder:
-outputs/20260731_090501
-
-Excel Output:
-outputs/20260731_090501/lauterbach_output_20260731_090501.xlsx
+```powershell
+py --version
 ```
 
-## run_summary.txt
+If Python is not found:
 
-A plain-text summary is written alongside the Excel file:
+1. Reinstall Python
+2. Make sure:
 
-```
-Run Timestamp: 20260731_090501
-
-Files Found: 1
-Files Processed: 1
-Files Failed: 0
-
-Excel Output:
-lauterbach_output_20260731_090501.xlsx
+```text
+✅ Add Python to PATH
 ```
 
-## Excel output
+is selected during installation
 
-The generated `.xlsx` file contains one row per serial number found across all processed files:
+---
 
-| Row type | Serial number | Model |
-|---|---|---|
-| DebugCable | cable serial | *(empty)* |
-| License category | category serial | first license code + name |
+## No CMM Files Found
 
-`State` is set to `In use` and `Substate` to `Issued` for every row. All other columns are empty.
+Verify files exist:
 
-## Project structure
-
+```powershell
+ls input_folder
 ```
-Python-Lauterbach-Batch-Parse/
-│
-├── main.py              # CLI entry point
-├── requirements.txt
-├── sample.cmm           # example input file
-├── input_folder/        # place .cmm files here for batch processing
-│
-├── outputs/             # auto-created; one subfolder per run
-│   └── YYYYMMDD_HHMMSS/
-│       ├── lauterbach_output_YYYYMMDD_HHMMSS.xlsx
-│       └── run_summary.txt
-│
-└── src/
-    ├── __init__.py
-    ├── models.py        # DebugCable, LicenseCategory, License dataclasses
-    ├── parser.py        # CmmParser — reads .cmm files into model objects
-    ├── formatter.py     # TerminalFormatter — renders to terminal
-    └── excel_writer.py  # ExcelWriter — writes .xlsx
+
+Verify file extensions:
+
+```text
+.cmm
+```
+
+---
+
+## Excel File Not Generated
+
+Check the outputs folder:
+
+```powershell
+ls outputs
+```
+
+Open outputs folder:
+
+```powershell
+explorer .\outputs\
+```
+
+Open the newest timestamped folder.
+
+---
+
+## Reinstall Dependencies
+
+```powershell
+py -m pip install -r requirements.txt --upgrade
+```
+
+---
+
+# Typical Workflow
+
+```powershell
+# 1. Copy all .cmm files into input_folder
+
+# 2. Run parser
+py main.py input_folder
+
+# 3. Open outputs folder
+explorer .\outputs\
+
+# 4. Open generated Excel file
+
+# 5. Review data
+
+# 6. Use spreadsheet for asset import workflows
 ```
