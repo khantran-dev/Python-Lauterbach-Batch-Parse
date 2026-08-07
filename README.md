@@ -7,34 +7,34 @@
 
         Python 3.11 or newer is required.
 
-        Verify Python is installed:
+            Verify Python is installed:
 
-        ```powershell
-        py --version
-        ```
+            ```powershell
+            py --version
+            ```
 
-        Expected:
+            Expected:
 
-        ```text
-        Python 3.11+
-        ```
+            ```text
+            Python 3.11+
+            ```
 
         If Python is not installed:
 
-        1. Download Python from:
-        https://www.python.org/downloads/
+            1. Download Python from:
+            https://www.python.org/downloads/
 
-        2. During installation, make sure to check:
+            2. During installation, make sure to check:
 
-        ```text
-        ✅ Add Python to PATH
-        ```
+            ```text
+            ✅ Add Python to PATH
+            ```
 
-        3. Verify installation:
+            3. Verify installation:
 
-        ```powershell
-        py --version
-        ```
+            ```powershell
+            py --version
+            ```
 
 # Initial Setup
 
@@ -60,25 +60,42 @@ PowerShell will open directly in the project folder
 
 Install required Python packages:
 
-```powershell
-py -m pip install -r requirements.txt
-```
+    ```powershell
+    py -m pip install -r requirements.txt
+    ```
 
-Expected:
+    Expected:
 
-```text
-Successfully installed openpyxl
-```
+    ```text
+    Successfully installed openpyxl
+    ```
+
+---
+
+# Excel Output
+
+## Header Highlighting
+
+Cells in row 1 that correspond to required import fields are highlighted yellow:
+
+- A (Asset tag), B (Serial number), F (Model), G (State), H (Substate), I (Assigned to), J (Department), K (Location), O (Key Contact), P (Condition), AC (Parent)
+
+No data rows are highlighted.
+
+## Model Column
+
+For license category rows the Model column is resolved as follows:
+
+- If the first license code (e.g. `LA-7742`) matches a known Lauterbach-to-Qualcomm mapping, the Qualcomm model number is written instead (e.g. `M007343`).
+- Some files use a trailing `X` suffix (e.g. `LA-7843X`). The suffix is stripped before the lookup is attempted.
+- If no mapping exists the original license string is kept unchanged (e.g. `LA-9999 Unknown`).
+- DebugCable rows always have a blank Model field.
 
 ---
 
 # Adding CMM Files
 
-Place all Lauterbach `.cmm` files into:
-
-```text
-input_folder
-```
+Place all Lauterbach `.cmm` files into: input_folder
 
 ---
 
@@ -86,17 +103,17 @@ input_folder
 
 ## Process All Files In Input Folder
 
-```powershell
-py main.py input_folder
-```
+    ```powershell
+    py main.py input_folder
+    ```
 
 ---
 
 ## Generate A Custom Excel Filename
 
-```powershell
-py main.py input_folder --excel my_export.xlsx
-```
+    ```powershell
+    py main.py input_folder --excel my_export.xlsx
+    ```
 
 ---
 
